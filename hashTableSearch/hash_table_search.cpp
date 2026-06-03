@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+//LinkedList implementation for Hash table
+
+template <typename T>
+struct Node {
+	T info;
+	Node<T>* next;
+};
+
+template <typename T>
+class LinkedList {
+private: 
+	Node<T>* start;
+public:
+	LinkedList() { start = nullptr; }
+	~LinkedList() { makeEmpty(); }
+	// inserts at the beginning of the linked list
+	void insertFront(T& element) {
+		Node<T>* newNode = new Node<T>;
+		newNode->info = element;
+		newNode->next = start;
+		start = newNode;
+		}
+  	// returns true if element is found; returns false if element is not found
+	
+  	bool find(T& target) {
+    	bool found = false;
+    	Node<T>* ptr = start;
+    	while (ptr != nullptr && !found) {
+      		if (ptr->info == target) {
+        	found = true;
+      	}
+      	else
+        	ptr = ptr->next;
+    	}
+    	return found;
+  	}
+
+  	bool isEmpty() { return start == nullptr; }
+  	void makeEmpty() {
+    	while (start != nullptr) {
+      		Node<T>* ptr  = start;
+      		start = start->next;
+      		delete ptr;
+		}
+  	}
+
+  	friend ostream& operator<< (ostream& os, LinkedList<T>& list) {
+    	Node<T>* ptr = list.start;
+    	while (ptr != nullptr) {
+      		os << ptr->info << " ";
+      		ptr = ptr->next;
+    	}
+	    return os;
+  	}
+};
+
+//Hashtable implementation
+template <typename T>
+class HashTable{
+    vector< LinkedList<T> > table;
+    int hashfunction (int hashitem){// hash function
+        return hashitem % table.size();
+    }
+    public:
+
+        HashTable (int size){
+            table.resize (size); // resize vector to support size elements.
+        }
+        ~HashTable(){
+            for (int i = 0; i < table.size(); i++)
+                table[i].makeEmpty();
+        }
+        int size(){
+            return table.size();
+        }
+        void insert (T newItem){
+            int location = hashfunction(newItem);
+            table[location].insertFront(newItem);
+        }
+
+        bool retrieve (T & target){
+            int location = hashfunction(target);
+            if (table[location].find(target) == false){return false;}
+            else {return true;}
+        }
+
+        friend ostream& operator<< (ostream& os, HashTable<T>& ht){
+            for (int i = 0; i < ht.size(); i++)
+                os << i << " = " << ht.table[i] << endl;
+            return os;
+        }
+};
