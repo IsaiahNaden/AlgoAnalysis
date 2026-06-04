@@ -1,9 +1,15 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <vector>
 using namespace std;
 
-//LinkedList implementation for Hash table
+struct Data{
+	long long number;
+	string fiveLetter;
+};
 
+//LinkedList implementation for Hash table
 template <typename T>
 struct Node {
 	T info;
@@ -30,7 +36,7 @@ public:
     	bool found = false;
     	Node<T>* ptr = start;
     	while (ptr != nullptr && !found) {
-      		if (ptr->info == target) {
+      		if ((ptr->info.number == target.number) && (ptr->info.fiveLetter == target.fiveLetter)) {
         	found = true;
       	}
       	else
@@ -51,7 +57,7 @@ public:
   	friend ostream& operator<< (ostream& os, LinkedList<T>& list) {
     	Node<T>* ptr = list.start;
     	while (ptr != nullptr) {
-      		os << ptr->info << " ";
+      		os << ptr->info.number << "/" << ptr->info.fiveLetter << " ";
       		ptr = ptr->next;
     	}
 	    return os;
@@ -78,12 +84,12 @@ class HashTable{
             return table.size();
         }
         void insert (T newItem){
-            int location = hashfunction(newItem);
+            int location = hashfunction(newItem.number);
             table[location].insertFront(newItem);
         }
 
         bool retrieve (T & target){
-            int location = hashfunction(target);
+            int location = hashfunction(target.number);
             if (table[location].find(target) == false){return false;}
             else {return true;}
         }
@@ -94,3 +100,47 @@ class HashTable{
             return os;
         }
 };
+
+vector<string> getLines(ifstream& file){
+	vector<string> arr;
+	if (!file.is_open()){
+		cout << "File not open\n";
+		return arr;
+	}
+
+	string line;
+	while (getline(file,line)){
+		if (!line.empty()){
+			arr.push_back(line);
+		}
+	}
+	return arr;
+}
+
+vector<Data> parseData(vector<string> arr){
+	Data d;
+	vector<Data> finalArr;
+	for (string s : arr){
+		d.number = stol(s.substr(0,s.find(',')));
+		d.fiveLetter = s.substr(s.find(',')+1);
+		finalArr.push_back(d);
+	}
+	return finalArr;
+}
+
+int main(){
+	ifstream file("testDataset.csv");
+	vector<string> arr = getLines(file);
+	vector<Data> finalArr = parseData(arr);
+	HashTable<Data> ht(finalArr.size());
+	for(Data d : finalArr){
+		ht.insert(d);
+	}
+	cout << ht << endl;
+	Data d;
+	d.number = 1000000197;
+	d.fiveLetter = "ufnj";
+	cout << ht.retrieve(d) << endl;
+	file.close();
+	return 0;
+}
