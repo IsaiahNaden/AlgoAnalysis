@@ -137,13 +137,20 @@ int main(){
 		ht.insert(d);
 	}
 
-
+	cout << ht << endl;
+	ofstream outputFile("hash_table_search_dataset.txt");
 	for(Data d : finalArr){
-		ht.retrieve(d);
+		bool found = ht.retrieve(d);
+		if (found == true){
+			cout << d.number << " = " << d.number << "/" << d.fiveLetter << endl;
+			outputFile << d.number << " = " << d.number << "/" << d.fiveLetter << endl;
+		}
+		else {
+			cout << "-1 = " << d.number << endl;
+			outputFile << "-1 = " << d.number << endl;
+		}
 	}
 	
-	ofstream outputFile("hash_table_search_dataset.txt");
-
 
 	file.close();
 	outputFile.close();
