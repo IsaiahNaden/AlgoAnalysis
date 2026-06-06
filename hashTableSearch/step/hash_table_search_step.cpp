@@ -129,17 +129,39 @@ vector<Data> parseData(vector<string> arr){
 }
 
 int main(){
-	ifstream dataFile("testDataset.csv");
-	vector<string> arr = getLines(dataFile);
-	vector<Data> finalArr = parseData(arr);
-	HashTable<Data> ht(finalArr.size());
-	for(Data d : finalArr){
+	string dataFileName;
+	cout << "Enter data file name: ";
+	getline(cin,dataFileName);
+	ifstream dataFile(dataFileName);
+	if (!dataFile.is_open()){
+		cerr << "File not found. Please try again.";
+		return 0;
+	}
+
+	vector<string> inputData = getLines(dataFile);
+	vector<Data> finalInputData = parseData(inputData);
+	HashTable<Data> ht(finalInputData.size());
+
+	for(Data d : finalInputData){
 		ht.insert(d);
 	}
 	dataFile.close();
 
-	for(Data d : finalArr){
-		string outputFileName = "hash_table_search_step_" + to_string(d.number) + ".txt";
+	string retrieveFileName;
+	cout << "Enter target file name: ";
+	getline(cin,retrieveFileName);
+	ifstream retrieveFile(retrieveFileName);
+	if (!retrieveFile.is_open()){
+		cerr << "File not found. Please try again.";
+		return 0;	
+	}
+
+	vector<string> retrievedData = getLines(retrieveFile);
+	vector<Data> finalRetrievedData = parseData(retrievedData);
+	retrieveFile.close();
+
+	for(Data d : finalRetrievedData){
+		string outputFileName = "dataset_1000_hash_table_search_step_" + to_string(d.number) + ".txt";
 		ofstream outputFile(outputFileName);
 		bool found = ht.retrieve(d);
 		if (found == true){
