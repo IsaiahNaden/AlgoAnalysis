@@ -130,10 +130,19 @@ vector<Data> parseData(vector<string> arr){
 }
 
 int main(){
-	ifstream file("testDataset.csv");
-	vector<string> arr = getLines(file);
+	string inputFileName;
+	cout << "Enter input file name: ";
+	getline(cin,inputFileName);
+	ifstream inputFile(inputFileName);
+	if (!inputFile.is_open()){
+		cerr << "File not found. Please try again.";
+		return 0;
+	}
+
+	vector<string> arr = getLines(inputFile);
 	vector<Data> finalArr = parseData(arr);
 	HashTable<Data> ht(finalArr.size());
+	inputFile.close();
 	for(Data d : finalArr){
 		ht.insert(d);
 	}
@@ -170,7 +179,6 @@ int main(){
 	outputFile << "Average case time: " << average << " nanoseconds\n";
 	outputFile << "Worst case time: " << largest << " nanoseconds\n";
 
-	file.close();
 	outputFile.close();
 	return 0;
 }
