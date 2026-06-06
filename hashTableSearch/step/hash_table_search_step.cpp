@@ -129,17 +129,18 @@ vector<Data> parseData(vector<string> arr){
 }
 
 int main(){
-	ifstream file("testDataset.csv");
-	vector<string> arr = getLines(file);
+	ifstream dataFile("testDataset.csv");
+	vector<string> arr = getLines(dataFile);
 	vector<Data> finalArr = parseData(arr);
 	HashTable<Data> ht(finalArr.size());
 	for(Data d : finalArr){
 		ht.insert(d);
 	}
+	dataFile.close();
 
-	cout << ht << endl;
-	ofstream outputFile("hash_table_search_dataset.txt");
 	for(Data d : finalArr){
+		string outputFileName = "hash_table_search_step_" + to_string(d.number) + ".txt";
+		ofstream outputFile(outputFileName);
 		bool found = ht.retrieve(d);
 		if (found == true){
 			cout << d.number << " = " << d.number << "/" << d.fiveLetter << endl;
@@ -149,10 +150,7 @@ int main(){
 			cout << "-1 = " << d.number << endl;
 			outputFile << "-1 = " << d.number << endl;
 		}
+		outputFile.close();
 	}
-	
-
-	file.close();
-	outputFile.close();
 	return 0;
 }
