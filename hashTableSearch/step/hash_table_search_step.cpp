@@ -121,7 +121,7 @@ vector<Data> parseData(vector<string> arr){
 	Data d;
 	vector<Data> finalArr;
 	for (string s : arr){
-		d.number = stol(s.substr(0,s.find(',')));
+		d.number = stoll(s.substr(0,s.find(',')));
 		d.fiveLetter = s.substr(s.find(',')+1);
 		finalArr.push_back(d);
 	}

@@ -122,7 +122,7 @@ vector<Data> parseData(vector<string> arr){
 	Data d;
 	vector<Data> finalArr;
 	for (string s : arr){
-		d.number = stol(s.substr(0,s.find(',')));
+		d.number = stoll(s.substr(0,s.find(',')));
 		d.fiveLetter = s.substr(s.find(',')+1);
 		finalArr.push_back(d);
 	}
@@ -153,12 +153,12 @@ int main(){
 		auto startTimer = std::chrono::high_resolution_clock::now();
 		ht.retrieve(d);
 		auto endTimer = std::chrono::high_resolution_clock::now() - startTimer;
-		long long duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTimer).count();
+		long double duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTimer).count();
 		listOfRetrieveTime.push_back(duration);
 	}
 
-	long long largest = listOfRetrieveTime.at(0);
-	long long smallest = listOfRetrieveTime.at(0);
+	double largest = listOfRetrieveTime.at(0);
+	double smallest = listOfRetrieveTime.at(0);
 	double average;
 	for (int i = 0; i < listOfRetrieveTime.size();i++){
 		average += listOfRetrieveTime.at(i);
@@ -172,12 +172,12 @@ int main(){
 
 	ofstream outputFile("hash_table_search_dataset.txt");
 	average = average/listOfRetrieveTime.size();
-	cout << "Best case time: " << smallest << " nanoseconds\n";
-	cout << "Average case time: " << average << " nanoseconds\n";
-	cout << "Worst case time: " << largest << " nanoseconds\n";
-	outputFile << "Best case time: " << smallest << " nanoseconds\n";
-	outputFile << "Average case time: " << average << " nanoseconds\n";
-	outputFile << "Worst case time: " << largest << " nanoseconds\n";
+	cout << "Best case time: " << smallest/1000000000 << " seconds\n";
+	cout << "Average case time: " << average/1000000000 << " seconds\n";
+	cout << "Worst case time: " << largest/1000000000 << " seconds\n";
+	outputFile << "Best case time: " << smallest/1000000000 << " seconds\n";
+	outputFile << "Average case time: " << average/1000000000 << " seconds\n";
+	outputFile << "Worst case time: " << largest/1000000000 << " seconds\n";
 
 	outputFile.close();
 	return 0;
