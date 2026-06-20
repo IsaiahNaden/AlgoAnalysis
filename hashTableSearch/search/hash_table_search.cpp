@@ -130,6 +130,7 @@ vector<Data> parseData(vector<string> arr){
 }
 
 int main(){
+	// open csv file
 	string inputFileName;
 	cout << "Enter input file name: ";
 	getline(cin,inputFileName);
@@ -138,46 +139,59 @@ int main(){
 		cerr << "File not found. Please try again.";
 		return 0;
 	}
-
+	// Get lines from csv file and insert in hash table
 	vector<string> arr = getLines(inputFile);
 	vector<Data> finalArr = parseData(arr);
 	HashTable<Data> ht(finalArr.size());
 	inputFile.close();
 	for(Data d : finalArr){
-		ht.insert(d);
+		ht.insert(d); 
 	}
+	//create data not in csv file
+	Data targetNotFound; 
+	targetNotFound.number = -1;
+	targetNotFound.fiveLetter = "eeeee";
+	finalArr.push_back(targetNotFound);
 
 	vector<long long> listOfRetrieveTime;
+	long double largest;
 
 	for(Data d : finalArr){
 		auto startTimer = std::chrono::high_resolution_clock::now();
-		ht.retrieve(d);
+		bool res = ht.retrieve(d); //hashtable retrieve returns boolean value
 		auto endTimer = std::chrono::high_resolution_clock::now() - startTimer;
 		long double duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTimer).count();
-		listOfRetrieveTime.push_back(duration);
+		if (res == true){
+			listOfRetrieveTime.push_back(duration); //to compile search time of all values in hashtable
+		}
+		else {
+			largest = duration; //to get search time of item not in hashtable
+		}
 	}
 
-	double largest = listOfRetrieveTime.at(0);
-	double smallest = listOfRetrieveTime.at(0);
-	double average;
+	long double average = listOfRetrieveTime.at(0);
+	long double smallest = listOfRetrieveTime.at(0);
 	for (int i = 0; i < listOfRetrieveTime.size();i++){
-		average += listOfRetrieveTime.at(i);
-		if (listOfRetrieveTime.at(i) > largest){
-			largest = listOfRetrieveTime.at(i);
+		if (listOfRetrieveTime.at(i) > average){
+			average = listOfRetrieveTime.at(i); //get longest search time
 		}
 		if (listOfRetrieveTime.at(i) < smallest){
-			smallest = listOfRetrieveTime.at(i);
+			smallest = listOfRetrieveTime.at(i); //get shortest search time
 		}
 	}
+	// Issue casting <seconds> to <nanoseconds> that makes the value 0.
+	// Manual conversion used instead.
+	smallest = smallest / 1000000000;
+	average = average / 1000000000;
+	largest = largest / 1000000000;	
 
 	ofstream outputFile("hash_table_search_dataset.txt");
-	average = average/listOfRetrieveTime.size();
-	cout << "Best case time: " << smallest/1000000000 << " seconds\n";
-	cout << "Average case time: " << average/1000000000 << " seconds\n";
-	cout << "Worst case time: " << largest/1000000000 << " seconds\n";
-	outputFile << "Best case time: " << smallest/1000000000 << " seconds\n";
-	outputFile << "Average case time: " << average/1000000000 << " seconds\n";
-	outputFile << "Worst case time: " << largest/1000000000 << " seconds\n";
+	cout << "Best case time: " << smallest << " seconds\n";
+	cout << "Average case time: " << average << " seconds\n";
+	cout << "Worst case time: " << largest << " seconds\n";
+	outputFile << "Best case time: " << smallest << " seconds\n";
+	outputFile << "Average case time: " << average << " seconds\n";
+	outputFile << "Worst case time: " << largest << " seconds\n";
 
 	outputFile.close();
 	return 0;
