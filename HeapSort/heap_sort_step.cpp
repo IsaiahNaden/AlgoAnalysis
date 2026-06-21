@@ -62,18 +62,22 @@ void logArrayState(const vector<Record>& arr, const string& stepLabel, ofstream&
 
 // max heapify which pushes smaller parent values down the tree
 void heap_sort(vector<Record>& arr, int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+    int largest = i;          // assume current root is the largest
+    int left = 2 * i + 1;     // calculate left child index in flat array
+    int right = 2 * i + 2;    // calculate right child index in flat array
+    // IF left child exists and id is strictly greater than current largest
     if (left < n && arr[left].id > arr[largest].id)
         largest = left;
+    // IF right child exists and its id is strictly greater than current largest
     if (right < n && arr[right].id > arr[largest].id)
         largest = right;
+    // IF the largest integer located in a child node, swap them
     if (largest != i) {
         Record temp = arr[i];
         arr[i] = arr[largest];
         arr[largest] = temp;
-        heap_sort(arr, n, largest); // recursively fix the affected subtree
+        // recursively sink the demoted parent node down the tree
+        heap_sort(arr, n, largest);
     }
 }
 
