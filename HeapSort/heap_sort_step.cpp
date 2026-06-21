@@ -1,3 +1,21 @@
+// *********************************************************
+// Program: YOUR_FILENAME.cpp
+// Course: CCP6214 Algorithm Design and Analysis
+// Lecture Class: TC4L
+// Tutorial Class: T13L
+// Trimester: 2610
+// Member_1: ID | NAME | EMAIL | PHONE
+// Member_2: 243UC247DM | HARVIND A/L SETHU PATHY | harvind.sethu.pathy@student.mmu.edu.my | +60194546875
+// Member_3: ID | NAME | EMAIL | PHONE
+// Member_4: ID | NAME | EMAIL | PHONE
+// *********************************************************
+// Task Distribution
+// Member_1:
+// Member_2:
+// Member_3:
+// Member_4:
+// *********************************************************
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -6,47 +24,46 @@
 
 using namespace std;
 
+// data type use unsigned long long with variable name 'id'
 struct Record {
-    unsigned long long id;
+    unsigned long long id;  
     string text;
 };
 
+// line parser that safely handles "1000000197, ufnja" and "1000000197/ufnja", whichever is provided in the dataset
 vector<Record> readDataset(const string& filename) {
     vector<Record> dataset;
     ifstream file(filename);
     string line;
 
-    if (!file.is_open()) {
-        cerr << "Error: Could not open " << filename << "\n";
-        return dataset;
-    }
+    if (!file.is_open()) return dataset;
 
     while (getline(file, line)) {
         if (line.empty()) continue;
+        // turn commas and slashes into blank spaces
+        for (char &c : line) { if (c == ',' || c == '/') c = ' '; }
+        
         stringstream ss(line);
         string id_str, text;
-        
-        if (getline(ss, id_str, ',') && getline(ss, text)) {
-            size_t start = text.find_first_not_of(" \t");
-            if (start != string::npos) text = text.substr(start);
+        if (ss >> id_str >> text) {
             dataset.push_back({stoull(id_str), text});
         }
     }
     return dataset;
 }
 
-void printState(const vector<Record>& arr, const string& label, ofstream& logFile) {
+// formats array into correct syntax [1000000197/ufnja, 1000000155/gslag] initial
+void logArrayState(const vector<Record>& arr, const string& stepLabel, ofstream& logFile) {
     logFile << "[";
-    for (size_t i = 0; i < arr.size(); ++i) {
-        logFile << arr[i].id << "/" << arr[i].text;
-        if (i < arr.size() - 1) {
-            logFile << ", ";
-        }
+    for (size_t k = 0; k < arr.size(); ++k) {
+        logFile << arr[k].id << "/" << arr[k].text;
+        if (k < arr.size() - 1) logFile << ", ";
     }
-    logFile << "] " << label << "\n";
+    logFile << "] " << stepLabel << "\n";
 }
 
-void heapify(vector<Record>& arr, int n, int i) {
+// max heapify which pushes smaller parent values down the tree
+void heap_sort(vector<Record>& arr, int n, int i) {
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -61,33 +78,34 @@ void heapify(vector<Record>& arr, int n, int i) {
         Record temp = arr[i];
         arr[i] = arr[largest];
         arr[largest] = temp;
-        heapify(arr, n, largest);
+        heap_sort(arr, n, largest); // recursively fix the affected subtree
     }
 }
 
-void heapSortSteps(vector<Record>& arr, ofstream& logFile) {
+void heap_sort_step(vector<Record>& arr, ofstream& logFile) {
     int n = arr.size();
 
+    // step 1 = build max heap by rearranging array so the root is absolute largest
     for (int i = n / 2 - 1; i >= 0; i--) {
-        heapify(arr, n, i);
+        heap_sort(arr, n, i);
     }
+    logArrayState(arr, "initial", logFile);
 
-    printState(arr, "initial", logFile);
-
+    // step 2 = one by one extract the max value at root to the back of the array
     for (int i = n - 1; i > 0; i--) {
         Record temp = arr[0];
         arr[0] = arr[i];
         arr[i] = temp;
 
-        heapify(arr, i, 0);
+        heap_sort(arr, i, 0); // restore max heap for remaining unsorted tree
 
-        printState(arr, "i = " + to_string(i), logFile);
+        logArrayState(arr, "i = " + to_string(i), logFile);
     }
 }
 
 int main(int argc, char* argv[]) {
     if (argc < 4) {
-        cout << "Usage: ./heap_sort_step <dataset_n.csv> <start_row> <end_row>\n";
+        cout << "Usage: ./heap_sort_step <dataset.csv> <start_row> <end_row>\n";
         return 1;
     }
 
@@ -95,30 +113,20 @@ int main(int argc, char* argv[]) {
     int startRow = stoi(argv[2]);
     int endRow = stoi(argv[3]);
 
-    vector<Record> fullDataset = readDataset(inputFile);
-    if (fullDataset.empty()) return 1;
+    vector<Record> fullData = readDataset(inputFile);
+    if (fullData.empty() || startRow < 1 || endRow > fullData.size()) return 1;
 
-    if (startRow < 1 || endRow > fullDataset.size() || startRow > endRow) {
-        cerr << "Error: Invalid start or end row.\n";
-        return 1;
-    }
+    // grabbing the specific rows the user asked for
+    vector<Record> targetSubArray(fullData.begin() + startRow - 1, fullData.begin() + endRow);
 
-    vector<Record> targetArray(fullDataset.begin() + startRow - 1, fullDataset.begin() + endRow);
-    int totalElements = fullDataset.size();
-
-    string logFileName = "dataset_" + to_string(totalElements) + "_heap_sort_step_" + 
-                         to_string(startRow) + "_" + to_string(endRow) + ".txt";
+    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sort_step_" + 
+                     to_string(startRow) + "_" + to_string(endRow) + ".txt";
     
-    ofstream logFile(logFileName);
-    if (!logFile.is_open()) {
-        cerr << "Error creating log file.\n";
-        return 1;
-    }
+    ofstream logFile(outName);
+    if (!logFile.is_open()) return 1;
     
-    heapSortSteps(targetArray, logFile);
-
+    heap_sort_step(targetSubArray, logFile);
     logFile.close();
-    cout << "Step logging complete. Check file: " << logFileName << "\n";
 
     return 0;
 }
