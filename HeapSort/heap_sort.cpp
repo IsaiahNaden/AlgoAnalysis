@@ -85,12 +85,15 @@ void perform_heap_sort(vector<Record>& arr) {
     }
 }
 
-int main(int argc, char* argv[]) {
-    if (argc < 2) return 1;
-    string inputFile = argv[1];
+int main() {
+    // input filename
+    string inputFile = "heap_sort_dataset_1000.csv";
     vector<Record> dataset = readDataset(inputFile);
     int n = dataset.size();
-    if (n == 0) return 1;
+    if (n == 0) {
+        cout << "Error: Could not locate or read '" << inputFile << "'\n";
+        return 1;
+    }
     // start clock
     auto start = high_resolution_clock::now();
     perform_heap_sort(dataset);

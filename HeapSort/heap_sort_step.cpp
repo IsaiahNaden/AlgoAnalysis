@@ -98,21 +98,22 @@ void heap_sort_step(vector<Record>& arr, ofstream& logFile) {
     }
 }
 
-int main(int argc, char* argv[]) {
-    // takes argument filename
-    if (argc < 2) {
-        cout << "Usage: ./heap_sort_step <dataset.csv>\n";
+int main() {
+    // input filename
+    string inputFile = "heap_sort_dataset_7.csv";
+    vector<Record> fullData = readDataset(inputFile);
+    
+    if (fullData.empty()) {
+        cout << "Error: Could not locate or read '" << inputFile << "'\n";
         return 1;
     }
-    string inputFile = argv[1];
-    vector<Record> fullData = readDataset(inputFile);
-    if (fullData.empty()) return 1;
     int startRow = 1;
     int endRow = fullData.size();
-    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sorted_step" + ".txt";
+    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sorted_step.txt";
     ofstream logFile(outName);
     if (!logFile.is_open()) return 1;
     heap_sort_step(fullData, logFile);
     logFile.close();
+    cout << "Success! Output generated in: " << outName << "\n";
     return 0;
 }
