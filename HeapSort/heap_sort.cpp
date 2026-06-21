@@ -36,7 +36,6 @@ vector<Record> readDataset(const string& filename) {
     ifstream file(filename);
     string line;
     if (!file.is_open()) return dataset;
-
     while (getline(file, line)) {
         if (line.empty()) continue;
         for (char &c : line) { if (c == ',' || c == '/') c = ' '; }
@@ -54,21 +53,17 @@ void heap_sort(vector<Record>& arr, int n, int i) {
     int largest = i;          // assume current root is the largest
     int left = 2 * i + 1;     // calculate left child index in flat array
     int right = 2 * i + 2;    // calculate right child index in flat array
-
     // IF left child exists and id is strictly greater than current largest
     if (left < n && arr[left].id > arr[largest].id)
         largest = left;
-
     // IF right child exists and its id is strictly greater than current largest
     if (right < n && arr[right].id > arr[largest].id)
         largest = right;
-
     // IF the largest integer located in a child node, swap them
     if (largest != i) {
         Record temp = arr[i];
         arr[i] = arr[largest];
         arr[largest] = temp;
-
         // recursively sink the demoted parent node down the tree
         heap_sort(arr, n, largest);
     }
@@ -77,17 +72,14 @@ void heap_sort(vector<Record>& arr, int n, int i) {
 // perform_heap_sort function will call heap_sort to sort integers by maxheap
 void perform_heap_sort(vector<Record>& arr) {
     int n = arr.size();
-
     // 1 = build a max heap from bottom up
     for (int i = n / 2 - 1; i >= 0; i--)
         heap_sort(arr, n, i);
-
     // 2 = extract maximum integer at root, place it at the back, shrink heap size
     for (int i = n - 1; i > 0; i--) {
         Record temp = arr[0];
         arr[0] = arr[i];
         arr[i] = temp;
-
         // restore max heap integrity for the remaining unsorted side of the array
         heap_sort(arr, i, 0);
     }
@@ -95,35 +87,26 @@ void perform_heap_sort(vector<Record>& arr) {
 
 int main(int argc, char* argv[]) {
     if (argc < 2) return 1;
-
     string inputFile = argv[1];
     vector<Record> dataset = readDataset(inputFile);
     int n = dataset.size();
     if (n == 0) return 1;
-
     // start clock
     auto start = high_resolution_clock::now();
-
     perform_heap_sort(dataset);
-
     // stop clock
     auto stop = high_resolution_clock::now();
     duration<double> time_span = duration_cast<duration<double>>(stop - start);
-
     // output sorted CSV as integer,string
-    string outputFile = "heap_sorted_dataset_" + to_string(n) + ".csv";
+    string outputFile = "heap_sorted_" + to_string(n) + "_dataset" + ".csv";
     ofstream outCsv(outputFile);
     for (const auto& rec : dataset) {
         outCsv << rec.id << "," << rec.text << "\n";
     }
     outCsv.close();
-
-    // print to console and output log file
-    cout << "Running time for Heap Sort (" << n << " elements): " << time_span.count() << "s\n";
-    
-    ofstream outTime("heap_sort_time_" + to_string(n) + ".txt");
-    outTime << "Algorithm: Heap Sort (MaxHeap)\nInput Size: " << n << "\nTime: " << time_span.count() << " seconds\n";
-    outTime.close();
-
+    // displays input size and time taken 
+    cout << "Heap sort using max heap\n";
+    cout << "Input Size: " << n << "\n";
+    cout << "Time: " << time_span.count() << " seconds\n";
     return 0;
 }

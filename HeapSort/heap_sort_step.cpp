@@ -35,9 +35,7 @@ vector<Record> readDataset(const string& filename) {
     vector<Record> dataset;
     ifstream file(filename);
     string line;
-
     if (!file.is_open()) return dataset;
-
     while (getline(file, line)) {
         if (line.empty()) continue;
         // turn commas and slashes into blank spaces
@@ -67,13 +65,10 @@ void heap_sort(vector<Record>& arr, int n, int i) {
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
-
     if (left < n && arr[left].id > arr[largest].id)
         largest = left;
-
     if (right < n && arr[right].id > arr[largest].id)
         largest = right;
-
     if (largest != i) {
         Record temp = arr[i];
         arr[i] = arr[largest];
@@ -84,49 +79,36 @@ void heap_sort(vector<Record>& arr, int n, int i) {
 
 void heap_sort_step(vector<Record>& arr, ofstream& logFile) {
     int n = arr.size();
-
     // step 1 = build max heap by rearranging array so the root is absolute largest
     for (int i = n / 2 - 1; i >= 0; i--) {
         heap_sort(arr, n, i);
     }
     logArrayState(arr, "initial", logFile);
-
     // step 2 = one by one extract the max value at root to the back of the array
     for (int i = n - 1; i > 0; i--) {
         Record temp = arr[0];
         arr[0] = arr[i];
         arr[i] = temp;
-
         heap_sort(arr, i, 0); // restore max heap for remaining unsorted tree
-
         logArrayState(arr, "i = " + to_string(i), logFile);
     }
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 4) {
-        cout << "Usage: ./heap_sort_step <dataset.csv> <start_row> <end_row>\n";
+    // takes argument filename
+    if (argc < 2) {
+        cout << "Usage: ./heap_sort_step <dataset.csv>\n";
         return 1;
     }
-
     string inputFile = argv[1];
-    int startRow = stoi(argv[2]);
-    int endRow = stoi(argv[3]);
-
     vector<Record> fullData = readDataset(inputFile);
-    if (fullData.empty() || startRow < 1 || endRow > fullData.size()) return 1;
-
-    // grabbing the specific rows the user asked for
-    vector<Record> targetSubArray(fullData.begin() + startRow - 1, fullData.begin() + endRow);
-
-    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sort_step_" + 
-                     to_string(startRow) + "_" + to_string(endRow) + ".txt";
-    
+    if (fullData.empty()) return 1;
+    int startRow = 1;
+    int endRow = fullData.size();
+    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sorted_step" + ".txt";
     ofstream logFile(outName);
     if (!logFile.is_open()) return 1;
-    
-    heap_sort_step(targetSubArray, logFile);
+    heap_sort_step(fullData, logFile);
     logFile.close();
-
     return 0;
 }
