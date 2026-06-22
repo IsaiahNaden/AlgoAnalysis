@@ -93,13 +93,10 @@ void radixSortStep(DataRow arr[], int n, int startRow, int endRow, const std::st
 }
 
 int main() {
-    int startRow, endRow;
 
-    std::string csvFilename = "dataset_10000.csv";
-    std::cout << "Enter tracking start row index: ";
-    std::cin >> startRow;
-    std::cout << "Enter tracking end row index: ";
-    std::cin >> endRow;
+    std::string csvFilename = "dataset_750000.csv";
+    int startRow = 0;   // Specify your preferred default start row here
+    int endRow = 7;     // Specify your preferred default end row here
 
     int n = countLines(csvFilename);
     if (n == 0) {
@@ -127,7 +124,7 @@ int main() {
     std::string stepOutputName = csvFilename.substr(0, csvFilename.find_last_of('.')) 
                                  + "_radix_sort_step_" 
                                  + std::to_string(startRow) + "_" 
-                                 + std::to_string(endRow) + ".csv";
+                                 + std::to_string(endRow) + ".txt";
 
     radixSortStep(dataset, n, startRow, endRow, stepOutputName);
 
