@@ -72,3 +72,5 @@ Testing/
 #vscode run config
 *.vscode/
 
+
+*.csv
