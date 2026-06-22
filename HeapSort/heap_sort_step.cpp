@@ -102,17 +102,25 @@ int main() {
     // input filename
     string inputFile = "heap_sort_dataset_7.csv";
     vector<Record> fullData = readDataset(inputFile);
-    
     if (fullData.empty()) {
         cout << "Error: Could not locate or read '" << inputFile << "'\n";
         return 1;
     }
-    int startRow = 1;
-    int endRow = fullData.size();
-    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sorted_step.txt";
+    // row config
+    int startRow = 1; // set start row
+    int endRow = 7;   // set end row
+    if (startRow < 1 || endRow > fullData.size() || startRow > endRow) {
+        cout << "Error: Hardcoded rows are out of bounds for this file.\n";
+        return 1;
+    }
+    // grabbing the specific rows requested
+    vector<Record> targetSubArray(fullData.begin() + startRow - 1, fullData.begin() + endRow);
+    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sorted_step_" + 
+                     to_string(startRow) + "_" + to_string(endRow) + ".txt";
+    
     ofstream logFile(outName);
     if (!logFile.is_open()) return 1;
-    heap_sort_step(fullData, logFile);
+    heap_sort_step(targetSubArray, logFile);
     logFile.close();
     cout << "Success! Output generated in: " << outName << "\n";
     return 0;
