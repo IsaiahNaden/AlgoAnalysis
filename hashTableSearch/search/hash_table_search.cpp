@@ -185,6 +185,7 @@ int main(){
 
 	ofstream outputFile("hash_table_search_dataset.txt");
 	cout << fixed << setprecision(10);
+	outputFile << fixed << setprecision(10);
 	cout << "Best case time: " << smallest << " seconds\n";
 	cout << "Average case time: " << average << " seconds\n";
 	cout << "Worst case time: " << largest << " seconds\n";
