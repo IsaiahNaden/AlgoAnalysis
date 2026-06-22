@@ -151,14 +151,21 @@ int main(){
 	targetNotFound.fiveLetter = "eeeee";
 	finalArr.push_back(targetNotFound);
 
+	//get best case scenario
+	Data bestCase = finalArr.at(0);
+	auto startTimer = std::chrono::high_resolution_clock::now();
+	ht.retrieve(bestCase);
+	auto endTimer = std::chrono::high_resolution_clock::now() - startTimer;
+	long double smallest = std::chrono::duration_cast<std::chrono::nanoseconds>(endTimer).count();
+
 	vector<long long> listOfRetrieveTime;
 	long double largest;
 
 	for(Data d : finalArr){
-		auto startTimer = std::chrono::high_resolution_clock::now();
+		auto startTimer2 = std::chrono::high_resolution_clock::now();
 		bool res = ht.retrieve(d); //hashtable retrieve returns boolean value
-		auto endTimer = std::chrono::high_resolution_clock::now() - startTimer;
-		long double duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTimer).count();
+		auto endTimer2 = std::chrono::high_resolution_clock::now() - startTimer2;
+		long double duration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTimer2).count();
 		if (res == true){
 			listOfRetrieveTime.push_back(duration); //to compile search time of all values in hashtable
 		}
@@ -167,21 +174,16 @@ int main(){
 		}
 	}
 
-	long double average = listOfRetrieveTime.at(0);
-	long double smallest = listOfRetrieveTime.at(0);
+	long double average = 0;
 	for (int i = 0; i < listOfRetrieveTime.size();i++){
-		if (listOfRetrieveTime.at(i) > average){
-			average = listOfRetrieveTime.at(i); //get longest search time
-		}
-		if (listOfRetrieveTime.at(i) < smallest){
-			smallest = listOfRetrieveTime.at(i); //get shortest search time
-		}
+		average += listOfRetrieveTime.at(i);  //get average value
 	}
+	average = average / listOfRetrieveTime.size();  //get avg value
 	// Issue casting <seconds> to <nanoseconds> that makes the value 0.
 	// Manual conversion used instead.
-	smallest = smallest / 1000000000;
-	average = average / 1000000000;
-	largest = largest / 1000000000;	
+	smallest = smallest / 1e9;
+	average = average / 1e9;
+	largest = largest / 1e9;	
 
 	ofstream outputFile("hash_table_search_dataset.txt");
 	cout << fixed << setprecision(10);
