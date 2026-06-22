@@ -132,15 +132,16 @@ vector<Data> parseData(vector<string> arr){
 
 int main(){
 	// open csv file
-	ifstream inputFile("dataset_1000.csv");
+	ifstream inputFile("dataset_100000000.csv");
 	if (!inputFile.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;
 	}
 	// Get lines from csv file and insert in hash table
 	vector<string> arr = getLines(inputFile);
+	int n = arr.size();
 	vector<Data> finalArr = parseData(arr);
-	HashTable<Data> ht(finalArr.size());
+	HashTable<Data> ht(n);
 	inputFile.close();
 	for(Data d : finalArr){
 		ht.insert(d); 
@@ -185,7 +186,8 @@ int main(){
 	average = average / 1e9;
 	largest = largest / 1e9;	
 
-	ofstream outputFile("hash_table_search_dataset.txt");
+	string fileName = "hash_table_search_dataset_" + to_string(n) + ".txt";
+    ofstream outputFile(fileName);
 	cout << fixed << setprecision(10);
 	outputFile << fixed << setprecision(10);
 	cout << "Best case time: " << smallest << " seconds\n";

@@ -100,7 +100,7 @@ void heap_sort_step(vector<Record>& arr, ofstream& logFile) {
 
 int main() {
     // input filename
-    string inputFile = "heap_sort_dataset_7.csv";
+    string inputFile = "dataset_100000000.csv";
     vector<Record> fullData = readDataset(inputFile);
     if (fullData.empty()) {
         cout << "Error: Could not locate or read '" << inputFile << "'\n";
@@ -115,7 +115,7 @@ int main() {
     }
     // grabbing the specific rows requested
     vector<Record> targetSubArray(fullData.begin() + startRow - 1, fullData.begin() + endRow);
-    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sorted_step_" + 
+    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sort_step_" + 
                      to_string(startRow) + "_" + to_string(endRow) + ".txt";
     
     ofstream logFile(outName);
