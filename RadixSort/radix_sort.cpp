@@ -115,7 +115,6 @@ int main() {
     std::cout << "Sorting completed!\n";
     std::cout << "Running time: " << elapsed.count() << " seconds\n";
     std::cout << "=========================================\n";
-    std::cout << "(Take your command prompt screenshot now!)\n\n";
 
     // Write sorted output data back to disk
     std::string outputFilename = "radix_sorted_" + inputFilename;

@@ -72,7 +72,7 @@ void radixSortStep(DataRow arr[], int n, int startRow, int endRow, const std::st
         outFile << arr[i].intKey << "/" << arr[i].strKey;
         if (i < endRow && i < n - 1) outFile << ", ";
     }
-    outFile << "] original\n";
+    outFile << "] initial\n";
 
     long long placement = 1;
     
@@ -95,7 +95,7 @@ void radixSortStep(DataRow arr[], int n, int startRow, int endRow, const std::st
 int main() {
     int startRow, endRow;
 
-    std::string csvFilename = "dataset_1000.csv";
+    std::string csvFilename = "dataset_10000.csv";
     std::cout << "Enter tracking start row index: ";
     std::cin >> startRow;
     std::cout << "Enter tracking end row index: ";
