@@ -86,10 +86,7 @@ int main()
      << filesystem::current_path()
      << endl;
 
-    long long n;
-
-    cout << "Enter dataset size: ";
-    cin >> n;
+    long long n = 10000;
 
     // Group Leader ID: 243UC2466L
     // Seed: 2431324662

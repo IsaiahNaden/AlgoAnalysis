@@ -1,3 +1,20 @@
+// *********************************************************
+// Program: hash_table_search_step.cpp
+// Course: CCP6214 Algorithm Design and Analysis
+// Lecture Class: TC4L
+// Tutorial Class: T13L
+// Trimester: 2610
+// Member_1: 243UC247DQ | Ajjay Naidu a/l Naidu | ajjay.naidu.naidu@student.mmu.edu.my | 012-721 7199
+// Member_2: 243UC247DM | Harvind a/l Sethu Pathy | harvind.sethu.pathy@student.mmu.edu.my | 019-454 6875
+// Member_3: 243UC2466L | Isaiah Naden a/l Felix Arokianathan | isaiah.naden.felix@student.mmu.edu.my | 010-212 2720
+// Member_4: 243UC245LQ | Sanjeevan a/l Rames | SANJEEVAN.RAMES@student.mmu.edu.my | 017- 687 4937
+// *********************************************************
+// Task Distribution
+// Member_1: Q1,Q5,Q6,Q7
+// Member_2: Q3,Q5,Q6,Q7
+// Member_3: Q2,Q5,Q6,Q7 
+// Member_4: Q4,Q5,Q6,Q7
+// *********************************************************
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -130,7 +147,7 @@ vector<Data> parseData(vector<string> arr){
 
 int main(){
 	//get and open dataset csv file
-	ifstream dataFile("dataset_1000.csv");
+	ifstream dataFile("dataset_10000.csv");
 	if (!dataFile.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;
@@ -145,7 +162,7 @@ int main(){
 	}
 	dataFile.close();
 	// get and open target file (found)
-	ifstream retrieveFileFound("7411632989.csv");
+	ifstream retrieveFileFound("anything.csv");
 	if (!retrieveFileFound.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;	
@@ -156,7 +173,7 @@ int main(){
 	retrieveFileFound.close();
 	
 	// get and open target file (Not found)
-	ifstream retrieveFileNotFound("123456789.csv");
+	ifstream retrieveFileNotFound("new.csv");
 	if (!retrieveFileNotFound.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;	

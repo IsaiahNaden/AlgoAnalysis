@@ -1,5 +1,5 @@
 // *********************************************************
-// Program: radix_sort_step.cpp
+// Program: heap_sort.cpp
 // Course: CCP6214 Algorithm Design and Analysis
 // Lecture Class: TC4L
 // Tutorial Class: T13L

@@ -1,5 +1,5 @@
 // *********************************************************
-// Program: radix_sort_step.cpp
+// Program: heap_sort_step.cpp
 // Course: CCP6214 Algorithm Design and Analysis
 // Lecture Class: TC4L
 // Tutorial Class: T13L
@@ -100,7 +100,7 @@ void heap_sort_step(vector<Record>& arr, ofstream& logFile) {
 
 int main() {
     // input filename
-    string inputFile = "heap_sort_dataset_7.csv";
+    string inputFile = "dataset_100000000.csv";
     vector<Record> fullData = readDataset(inputFile);
     if (fullData.empty()) {
         cout << "Error: Could not locate or read '" << inputFile << "'\n";
