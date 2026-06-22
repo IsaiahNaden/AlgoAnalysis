@@ -101,7 +101,7 @@ int main() {
     auto stop = high_resolution_clock::now();
     duration<double> time_span = duration_cast<duration<double>>(stop - start);
     // output sorted CSV as integer,string
-    string outputFile = "heap_sorted_" + to_string(n) + "_dataset" + ".csv";
+    string outputFile = "heap_sorted_dataset_" + to_string(n) + ".csv";
     ofstream outCsv(outputFile);
     for (const auto& rec : dataset) {
         outCsv << rec.id << "," << rec.text << "\n";

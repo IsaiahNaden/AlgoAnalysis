@@ -115,7 +115,7 @@ int main() {
     }
     // grabbing the specific rows requested
     vector<Record> targetSubArray(fullData.begin() + startRow - 1, fullData.begin() + endRow);
-    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sorted_step_" + 
+    string outName = "dataset_" + to_string(fullData.size()) + "_heap_sort_step_" + 
                      to_string(startRow) + "_" + to_string(endRow) + ".txt";
     
     ofstream logFile(outName);
