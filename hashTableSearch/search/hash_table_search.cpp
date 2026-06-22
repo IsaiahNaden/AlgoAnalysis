@@ -131,10 +131,7 @@ vector<Data> parseData(vector<string> arr){
 
 int main(){
 	// open csv file
-	string inputFileName;
-	cout << "Enter input file name: ";
-	getline(cin,inputFileName);
-	ifstream inputFile(inputFileName);
+	ifstream inputFile("dataset_1000.csv");
 	if (!inputFile.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;
