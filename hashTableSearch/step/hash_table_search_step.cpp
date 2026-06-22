@@ -87,7 +87,7 @@ class HashTable{
             int location = hashfunction(newItem.number);
             table[location].insertFront(newItem);
         }
-
+		// In hashtable class
         bool retrieve (T & target){
             int location = hashfunction(target.number);
             if (table[location].find(target) == false){return false;}
@@ -129,15 +129,13 @@ vector<Data> parseData(vector<string> arr){
 }
 
 int main(){
-	string dataFileName;
-	cout << "Enter data file name: ";
-	getline(cin,dataFileName);
-	ifstream dataFile(dataFileName);
+	//get and open dataset csv file
+	ifstream dataFile("dataset_1000.csv");
 	if (!dataFile.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;
 	}
-
+	//read lines from dataset file
 	vector<string> inputData = getLines(dataFile);
 	vector<Data> finalInputData = parseData(inputData);
 	HashTable<Data> ht(finalInputData.size());
@@ -146,29 +144,52 @@ int main(){
 		ht.insert(d);
 	}
 	dataFile.close();
-
-	string retrieveFileName;
-	cout << "Enter target file name: ";
-	getline(cin,retrieveFileName);
-	ifstream retrieveFile(retrieveFileName);
-	if (!retrieveFile.is_open()){
+	// get and open target file (found)
+	ifstream retrieveFileFound("7411632989.csv");
+	if (!retrieveFileFound.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;	
 	}
+	//read target data from file
+	vector<string> retrievedDataFound = getLines(retrieveFileFound);
+	vector<Data> finalRetrievedDataFound = parseData(retrievedDataFound);
+	retrieveFileFound.close();
+	
+	// get and open target file (Not found)
+	ifstream retrieveFileNotFound("123456789.csv");
+	if (!retrieveFileNotFound.is_open()){
+		cerr << "File not found. Please try again.";
+		return 0;	
+	}
+	//read target data from file
+	vector<string> retrievedDataNotFound = getLines(retrieveFileNotFound);
+	vector<Data> finalRetrievedDataNotFound = parseData(retrievedDataNotFound);
+	retrieveFileNotFound.close();
 
-	vector<string> retrievedData = getLines(retrieveFile);
-	vector<Data> finalRetrievedData = parseData(retrievedData);
-	retrieveFile.close();
-
-	for(Data d : finalRetrievedData){
+	for(Data d : finalRetrievedDataFound){
 		string outputFileName = "dataset_1000_hash_table_search_step_" + to_string(d.number) + ".txt";
 		ofstream outputFile(outputFileName);
 		bool found = ht.retrieve(d);
-		if (found == true){
+		if (found == true){ //if found
 			cout << d.number << " = " << d.number << "/" << d.fiveLetter << endl;
 			outputFile << d.number << " = " << d.number << "/" << d.fiveLetter << endl;
 		}
-		else {
+		else { //if not found
+			cout << "-1 = " << d.number << endl;
+			outputFile << "-1 = " << d.number << endl;
+		}
+		outputFile.close();
+	}
+
+	for(Data d : finalRetrievedDataNotFound){
+		string outputFileName = "dataset_1000_hash_table_search_step_" + to_string(d.number) + ".txt";
+		ofstream outputFile(outputFileName);
+		bool found = ht.retrieve(d);
+		if (found == true){ //if found
+			cout << d.number << " = " << d.number << "/" << d.fiveLetter << endl;
+			outputFile << d.number << " = " << d.number << "/" << d.fiveLetter << endl;
+		}
+		else { //if not found
 			cout << "-1 = " << d.number << endl;
 			outputFile << "-1 = " << d.number << endl;
 		}

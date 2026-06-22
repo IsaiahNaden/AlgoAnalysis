@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <iomanip>
 using namespace std;
 
 struct Data{
@@ -131,10 +132,7 @@ vector<Data> parseData(vector<string> arr){
 
 int main(){
 	// open csv file
-	string inputFileName;
-	cout << "Enter input file name: ";
-	getline(cin,inputFileName);
-	ifstream inputFile(inputFileName);
+	ifstream inputFile("dataset_1000.csv");
 	if (!inputFile.is_open()){
 		cerr << "File not found. Please try again.";
 		return 0;
@@ -186,6 +184,8 @@ int main(){
 	largest = largest / 1000000000;	
 
 	ofstream outputFile("hash_table_search_dataset.txt");
+	cout << fixed << setprecision(10);
+	outputFile << fixed << setprecision(10);
 	cout << "Best case time: " << smallest << " seconds\n";
 	cout << "Average case time: " << average << " seconds\n";
 	cout << "Worst case time: " << largest << " seconds\n";
